@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="Ws_pais">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">wsPaisService</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php?WSDL</item>
+      <item name="Package">services.ws_pais</item>
+      <item name="WSDL-port">wsPaisPort</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="listadoComunas" arguments="idProvincia:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoComunas</item>
+        <item name="listadoComunas">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoComunas</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoProvincias" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="listadoProvincias">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoProvincias</item>
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoProvincias</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorRegion" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#establecimientoPorRegion</item>
+        <item name="establecimientoPorRegion">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,establecimientoPorRegion</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoRegiones" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoRegiones</item>
+        <item name="listadoRegiones">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoRegiones</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorComuna_temp" arguments="desComuna:string" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#establecimientoPorComuna_temp</item>
+        <item name="establecimientoPorComuna_temp">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,establecimientoPorComuna_temp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+  </service>
+  <service name="Ws_pais_">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">wsPaisService</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php?WSDL</item>
+      <item name="Package">services.ws_pais_</item>
+      <item name="WSDL-port">wsPaisPort</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="establecimientoPorProvincia" arguments="idProvincia:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="establecimientoPorProvincia">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,establecimientoPorProvincia</item>
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#establecimientoPorProvincia</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoProvincias" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="listadoProvincias">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoProvincias</item>
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoProvincias</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoComunas" arguments="idProvincia:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoComunas</item>
+        <item name="listadoComunas">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoComunas</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorRegion" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#establecimientoPorRegion</item>
+        <item name="establecimientoPorRegion">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,establecimientoPorRegion</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorComuna_temp" arguments="desComuna:string" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#establecimientoPorComuna_temp</item>
+        <item name="establecimientoPorComuna_temp">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,establecimientoPorComuna_temp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoRegiones" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php#listadoRegiones</item>
+        <item name="listadoRegiones">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap.php,listadoRegiones</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+  </service>
+  <service name="Ws_pais_2">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">wsPais_Service</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php?WSDL</item>
+      <item name="Package">services.ws_pais_2</item>
+      <item name="WSDL-port">wsPais_Port</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="listadoProvincias" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="listadoProvincias">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php,listadoProvincias</item>
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php#listadoProvincias</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorRegion" arguments="idRegion:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php#establecimientoPorRegion</item>
+        <item name="establecimientoPorRegion">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php,establecimientoPorRegion</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoComunas" arguments="idProvincia:integer" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php#listadoComunas</item>
+        <item name="listadoComunas">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php,listadoComunas</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">integer</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="listadoRegiones" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php#listadoRegiones</item>
+        <item name="listadoRegiones">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php,listadoRegiones</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+    <function name="establecimientoPorComuna_temp" arguments="desComuna:string" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php#establecimientoPorComuna_temp</item>
+        <item name="establecimientoPorComuna_temp">http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php,establecimientoPorComuna_temp</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string</item>
+        <item name="returnType">string</item>
+      </annotation>
+    </function>
+  </service>
+</model>

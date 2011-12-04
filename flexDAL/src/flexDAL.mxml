@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:ws_pais="services.ws_pais_2.*" 
+			   xmlns:maps="com.google.maps.*" width="800" height="600" initialize="Inicio();">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<!-- WebService -->
+		<ws_pais:Ws_pais_2 id="wsPais" fault="wsPais_Fault(event)" showBusyCursor="true"/>
+		<!-- Llamadas -->
+		<s:CallResponder id="listadoRegiones" result="resultRegiones(event);" fault="fault_wsPais(event, 'regiones');"/>
+		<s:CallResponder id="listadoProvincias" result="resultProvincias(event);" fault="fault_wsPais(event, 'provincias');"/>
+		<s:CallResponder id="listadoComunas" result="resultComunas(event);" fault="fault_wsPais(event, 'comunas');"/>
+		<s:CallResponder id="establecimientoRegion" result="resultEstablecimientoRegion(event);" fault="fault_wsPais(event, 'establecimiento_region');"/>
+		<s:CallResponder id="establecimientoComuna" result="resultEstablecimientoComuna(event);" fault="fault_wsPais(event, 'establecimiento_comuna');"/>
+	</fx:Declarations>
+	<fx:Script source="utils/json.as"/>
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import com.google.maps.InfoWindowOptions;
+			import com.google.maps.LatLng;
+			import com.google.maps.Map;
+			import com.google.maps.MapEvent;
+			import com.google.maps.MapMouseEvent;
+			import com.google.maps.MapType;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.NavigationControl;
+			import com.google.maps.controls.PositionControl;
+			import com.google.maps.controls.ZoomControl;
+			import com.google.maps.overlays.Marker;
+			import com.google.maps.overlays.MarkerOptions;
+			import com.google.maps.services.ClientGeocoder;
+			import com.google.maps.services.GeocodingEvent;
+			
+			[Bindable] private var arrRegiones:ArrayCollection = new ArrayCollection();
+			[Bindable] private var arrProvincias:ArrayCollection = new ArrayCollection();
+			[Bindable] private var arrComunas:ArrayCollection = new ArrayCollection();
+			[Bindable] private var arrEstablecimientos:ArrayCollection = new ArrayCollection();
+			
+			// Localhost API KEY
+			//[Bindable] private var mapKey:String = "ABQIAAAAKa73Dt5V_pBxvTHRiSe35xQs3DDU4Oa9IcW-Bm07m-hMcq3a8RRQOYuiy0KJmtEtFeuCVvVJdB7a8A";
+			
+			private var wsdlUrl:String = "http://roma.ceisufro.cl/desarrollofelipe/webservice/application/ws_pais/ws_pais.soap_.php?WSDL";
+			//private var wsdlUrl:String = "http://localhost/SIMCE/webservice/application/ws_pais/ws_pais.soap.php?WSDL";
+			
+			private var idRegion:int;
+			private var idProvincia:int;
+			private var desComuna:String;
+			
+			public var Provincia:String = "Provincia de";
+			public var Provincia2:String = ", Chile";
+			public var Comuna:String = "Comuna";
+			public var Comuna2:String = ", Chile";
+			
+			public var geocoder:ClientGeocoder;
+			
+			/**
+			 * wsPais_Fault
+			 */
+			private function wsPais_Fault(event:FaultEvent):void {
+				Alert.show("Ocurrió el siguiente fallo llamando al servicio web: \n\n" + event.fault.toString());
+			}
+			
+			/**	
+			 * Funcion Inicio
+			 */
+			private function Inicio():void {
+				// WSDL
+				wsPais.wsdl = wsdlUrl
+				
+				// Llamar regiones
+				listadoRegiones.token = wsPais.listadoRegiones();
+			}
+			
+			/**
+			 * fault_wsPais
+			 */
+			private function fault_wsPais(event:FaultEvent, origen:String):void {
+				switch (origen) {
+					case "regiones":
+						Alert.show("Ocurrió el siguiente fallo al llamar al método listadoRegiones: \n\n" + event.fault.toString());
+						break;
+					case "provincias":
+						Alert.show("Ocurrió el siguiente fallo al llamar al método listadoProvincias(" + idRegion + "): \n\n" + event.fault.toString());
+						break;
+					case "comunas":
+						Alert.show("Ocurrió el siguiente fallo al llamar al método listadoComunas(" + idProvincia + "): \n\n" + event.fault.toString());
+						break;
+					case "establecimiento_region":
+						Alert.show("Ocurrió el siguiente fallo al llamar al método establecimientoPorRegion(" + idRegion + "): \n\n" + event.fault.toString());
+						break;
+					case "establecimiento_comuna":
+						Alert.show("Ocurrió el siguiente fallo al llamar al método establecimientoPorComuna_temp(" + desComuna + "): \n\n" + event.fault.toString());
+						break;
+				}
+			}
+			
+			/**
+			 * Respuesta listadoRegiones
+			 */
+			private function resultRegiones(event:ResultEvent):void {
+				if (validarJSON(event.result.toString())) {
+					arrRegiones = JSONToArrayCollection(event.result.toString());
+					
+					// IX (default)
+					for (var i:int = 0; i < arrRegiones.length; i++) {
+						if ((arrRegiones.getItemAt(i).region_nombre).search(/arauc/i) != -1) {
+							cboRegion.selectedIndex = i;
+							obtenerProvincias();
+							establecimientoPorRegion();
+							i = arrRegiones.length;
+						}
+					}
+				}
+				else {
+					Alert.show("Respuesta inválida: \n\n" + event.result.toString());
+				}
+			}
+			
+			/**
+			 * Respuesta listadoProvincias
+			 */
+			private function resultProvincias(event:ResultEvent):void {
+				if (validarJSON(event.result.toString())) {
+					arrProvincias = JSONToArrayCollection(event.result.toString());
+				}
+				else {
+					Alert.show("Respuesta inválida: \n\n" + event.result.toString());
+				}
+			}
+			
+			/**
+			 * Respuesta listadoComunas
+			 */
+			private function resultComunas(event:ResultEvent):void {
+				if (validarJSON(event.result.toString())) {
+					arrComunas = JSONToArrayCollection(event.result.toString());
+				}
+				else {
+					Alert.show("Respuesta inválida: \n\n" + event.result.toString());
+				}
+			}
+			
+			/**
+			 * Respuesta establecimientoRegion
+			 */
+			private function resultEstablecimientoRegion(event:ResultEvent):void {
+				if (validarJSON(event.result.toString())) {
+					arrEstablecimientos = JSONToArrayCollection(event.result.toString());
+					dibujarPuntos();
+				}
+				else {
+					Alert.show("Respuesta inválida: \n\n" + event.result.toString());
+				}
+			}
+			
+			/**
+			 * Respuesta establecimientoComuna
+			 */
+			private function resultEstablecimientoComuna(event:ResultEvent):void {
+				if (validarJSON(event.result.toString())) {
+					arrEstablecimientos = JSONToArrayCollection(event.result.toString());
+				}
+				else {
+					Alert.show("Respuesta inválida: \n\n" + event.result.toString());
+				}
+			}
+			
+			/**
+			 * obtenerProvincias
+			 */
+			private function obtenerProvincias():void {
+				if (cboRegion.selectedIndex != -1) {
+					arrProvincias.removeAll();
+					idRegion = cboRegion.selectedItem.region_id;
+					listadoProvincias.token = wsPais.listadoProvincias(idRegion);
+				}
+			}
+			
+			/**
+			 * obtenerComunas
+			 */
+			private function obtenerComunas():void {
+				if (cboProvincia.selectedIndex != -1) {
+					arrComunas.removeAll();
+					idProvincia = cboProvincia.selectedItem.provincia_id;
+					listadoComunas.token = wsPais.listadoComunas(idProvincia);
+				}
+			}
+			
+			/**
+			 * establecimientoPorRegion
+			 */
+			private function establecimientoPorRegion():void {
+				if (cboRegion.selectedIndex != -1) {
+					idRegion = cboRegion.selectedItem.region_id;
+					establecimientoRegion.token = wsPais.establecimientoPorRegion(idRegion);
+				}
+			}
+			
+			/**
+			 * establecimientoPorComuna
+			 */
+			private function establecimientoPorComuna():void {
+				if (cboComuna.selectedIndex != -1) {
+					arrEstablecimientos.removeAll();
+					desComuna = cboComuna.selectedItem.comuna_nombre;
+					establecimientoRegion.token = wsPais.establecimientoPorComuna_temp(desComuna);
+				}
+			}
+			
+			/**
+			 * inicioMapa()
+			 */
+			public function inicioMapa(event:Event):void {
+				map.enableScrollWheelZoom();
+				map.enableContinuousZoom();
+				map.addControl(new ZoomControl());
+				map.addControl(new NavigationControl());
+				map.addControl(new PositionControl());
+				map.addControl(new MapTypeControl());
+				
+				geocoder = new ClientGeocoder();
+				doGeocode(event, cboRegion.selectedItem.region_nombre);
+				//dibujarPuntos();
+			}
+			
+			/**
+			 * doGeocode
+			 */
+			public function doGeocode(event:Event, parametroBusqueda:String):void {
+				// Geocoding example
+				geocoder.resetCache();
+				
+				geocoder.addEventListener(
+					GeocodingEvent.GEOCODING_SUCCESS,
+					function(event:GeocodingEvent):void {
+						var placemarks:Array = event.response.placemarks;
+						
+						if (placemarks.length > 0) {
+							map.setCenter(placemarks[0].point, 8);
+						}
+					});
+				
+				geocoder.addEventListener(
+					GeocodingEvent.GEOCODING_FAILURE,
+					function(event:GeocodingEvent):void {
+						Alert.show("Geocoding failed");
+						trace(event);
+						trace(event.status);
+					});
+				
+				geocoder.geocode(parametroBusqueda);
+			}
+			
+			private function dibujarPuntos():void {
+				if (arrEstablecimientos.length > 0) {
+					geocoder.resetCache();
+					map.clearOverlays();
+					
+					for (var i:int = 0; i < arrEstablecimientos.length; i++) {
+						var latitud:Number = arrEstablecimientos.getItemAt(i).establecimiento_latitud;
+						var longitud:Number = arrEstablecimientos.getItemAt(i).establecimiento_longitud;
+						
+						var coordenadas:LatLng = new LatLng(latitud, longitud);
+						
+						var options:MarkerOptions = new MarkerOptions();
+						options.draggable = false;
+						
+						var punto:Marker = new Marker(coordenadas, options);
+						
+						punto.addEventListener(MapMouseEvent.CLICK, function(event:Event):void {
+							/*
+							var marker:Marker = event.target as Marker;
+							var stringLatLng:String = marker.getPosition();
+							var arrLatLng:Array = stringLatLng.split(',');
+							var lat:Number = arrLatLng[0];
+							var long:Number = arrLatLng[1];
+							*/
+							
+							map.openInfoWindow(null, 
+							new InfoWindowOptions({title: "Nombre establecimiento", content: "Puntaje SIMCE:"}));
+						});
+						
+						map.addOverlay(punto);
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	<mx:Panel top="0" bottom="0" width="300" layout="absolute">
+		<s:Label x="40" y="20" text="Seleccione Región:"/>
+		<s:ComboBox id="cboRegion" x="40" y="40" width="215" prompt="Seleccione Región" dataProvider="{arrRegiones}" labelField="region_nombre" change="doGeocode(event, cboRegion.selectedItem.region_nombre); obtenerProvincias(); establecimientoPorRegion();"/>
+		<s:Label x="40" y="90" text="Seleccione Provincia:"/>
+		<s:ComboBox id="cboProvincia" x="40" y="110" width="215" prompt="Seleccione Provincia" dataProvider="{arrProvincias}" labelField="provincia_nombre" change="doGeocode(event, Provincia + cboProvincia.selectedItem.provincia_nombre + Provincia2); obtenerComunas();"/>
+		<s:Label x="40" y="150" text="Seleccione Comuna:"/>
+		<s:ComboBox id="cboComuna" x="40" y="170" width="215" prompt="Seleccione Comuna" dataProvider="{arrComunas}" labelField="comuna_nombre" change="doGeocode(event, cboComuna.selectedItem.comuna_nombre + Comuna2); establecimientoPorComuna();"/>
+		<s:Label x="40" y="220" text="Seleccione Establecimiento:"/>
+		<s:ComboBox id="cboEstablecimiento" x="40" y="240" width="215" prompt="Seleccione Establecimiento" dataProvider="{arrEstablecimientos}" labelField="establecimiento_nombre"/>
+	</mx:Panel>
+	<maps:Map id="map" x="300" top="0" bottom="0" width="500" sensor="true" key="ABQIAAAAo61M533lSR9d6uFPOlmuZhSizcfE5fWsVBccUMC7FgGZxQOsuRTnHh_ANcVOzZFEZSamu0oE8AeCyg" mapevent_mapready="inicioMapa(event);"/>
+</s:Application>
